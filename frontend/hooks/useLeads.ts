@@ -1,0 +1,28 @@
+'use client'
+
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { leadsService } from '@/services/leadsService'
+import { Lead, CreateLeadData } from '@/types'
+import toast from 'react-hot-toast'
+
+export function useLeads() {
+  return useQuery<Lead[]>({
+    queryKey: ['leads'],
+    queryFn: leadsService.getAll,
+  })
+}
+
+export function useCreateLead() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: leadsService.create,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['leads'] })
+      toast.success('Lead enviado com sucesso! Entraremos em contato em breve.')
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || 'Erro ao enviar lead')
+    },
+  })
+}
