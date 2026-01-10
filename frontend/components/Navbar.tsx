@@ -18,7 +18,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center">
             <Image
-              src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/logo.png`}
+              src="/images/logo.png"
               alt="Nix Imóveis"
               width={200}
               height={100}
