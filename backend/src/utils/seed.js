@@ -18,6 +18,10 @@ const seed = async () => {
       {
         name: "Admin Nix",
         email: "admin@nix.com",
+        phone: "(11) 99999-9999",
+        birthDate: new Date("1990-01-01"),
+        profession: "Administrador",
+        city: "São Paulo",
         passwordHash: adminPassword,
         role: "admin",
       },
@@ -32,6 +36,10 @@ const seed = async () => {
       {
         name: "Agente Nix",
         email: "agent@nix.com",
+        phone: "(11) 88888-8888",
+        birthDate: new Date("1985-05-15"),
+        profession: "Corretor de Imóveis",
+        city: "São Paulo",
         passwordHash: agentPassword,
         role: "agent",
       },

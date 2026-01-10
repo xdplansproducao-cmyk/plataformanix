@@ -21,7 +21,7 @@ export const getPropertyById = async (req, res, next) => {
 
 export const createProperty = async (req, res, next) => {
   try {
-    const propertyData = JSON.parse(req.body.data || "{}");
+    const propertyData = req.body;
     const images = req.files || [];
     const property = await propertyService.createProperty(
       propertyData,
@@ -36,7 +36,7 @@ export const createProperty = async (req, res, next) => {
 
 export const updateProperty = async (req, res, next) => {
   try {
-    const propertyData = req.body.data ? JSON.parse(req.body.data) : req.body;
+    const propertyData = req.body;
     const images = req.files || [];
     const property = await propertyService.updateProperty(
       req.params.id,

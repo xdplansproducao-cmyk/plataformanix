@@ -4,14 +4,10 @@ import helmet from "helmet";
 import morgan from "morgan";
 import mongoSanitize from "express-mongo-sanitize";
 import path from "path";
-import { fileURLToPath } from "url";
 import { config } from "./config/env.js";
 import routes from "./routes/index.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { notFound } from "./middlewares/notFound.js";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const app = express();
 

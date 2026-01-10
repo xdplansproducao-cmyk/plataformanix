@@ -15,6 +15,25 @@ const userSchema = new mongoose.Schema(
       trim: true,
       match: [/^\S+@\S+\.\S+$/, "Email inválido"],
     },
+    phone: {
+      type: String,
+      required: [true, "Telefone é obrigatório"],
+      trim: true,
+    },
+    birthDate: {
+      type: Date,
+      required: [true, "Data de nascimento é obrigatória"],
+    },
+    profession: {
+      type: String,
+      required: [true, "Profissão é obrigatória"],
+      trim: true,
+    },
+    city: {
+      type: String,
+      required: [true, "Cidade é obrigatória"],
+      trim: true,
+    },
     passwordHash: {
       type: String,
       required: [true, "Senha é obrigatória"],
@@ -30,7 +49,5 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
-userSchema.index({ email: 1 });
 
 export const User = mongoose.model("User", userSchema);

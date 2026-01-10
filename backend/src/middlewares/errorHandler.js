@@ -1,4 +1,4 @@
-export const errorHandler = (err, req, res, next) => {
+export const errorHandler = (err, req, res, _next) => {
   console.error("Erro:", err);
 
   if (err.name === "ValidationError") {

@@ -38,7 +38,6 @@ export const getAllLeads = async (page = 1, limit = 20) => {
     .limit(limit)
     .lean();
 
-  const total = await Lead.countDocuments();
 
   // Transforma os leads para o formato esperado pelo frontend
   const transformedLeads = leads.map(transformLead);

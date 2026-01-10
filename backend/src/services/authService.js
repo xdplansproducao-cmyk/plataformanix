@@ -3,7 +3,7 @@ import { User } from "../models/User.js";
 import { generateToken } from "../utils/jwt.js";
 
 export const registerUser = async (userData) => {
-  const { name, email, password } = userData;
+  const { name, email, phone, birthDate, profession, city, password } = userData;
 
   const existingUser = await User.findOne({ email });
   if (existingUser) {
@@ -14,6 +14,10 @@ export const registerUser = async (userData) => {
   const user = await User.create({
     name,
     email,
+    phone,
+    birthDate,
+    profession,
+    city,
     passwordHash,
     role: "user",
   });
@@ -25,6 +29,10 @@ export const registerUser = async (userData) => {
       _id: user._id.toString(),
       name: user.name,
       email: user.email,
+      phone: user.phone,
+      birthDate: user.birthDate,
+      profession: user.profession,
+      city: user.city,
       role: user.role,
       createdAt: user.createdAt,
     },
@@ -50,6 +58,10 @@ export const loginUser = async (email, password) => {
       _id: user._id.toString(),
       name: user.name,
       email: user.email,
+      phone: user.phone,
+      birthDate: user.birthDate,
+      profession: user.profession,
+      city: user.city,
       role: user.role,
       createdAt: user.createdAt,
     },
@@ -67,6 +79,10 @@ export const getCurrentUser = async (userId) => {
     _id: user._id.toString(),
     name: user.name,
     email: user.email,
+    phone: user.phone,
+    birthDate: user.birthDate,
+    profession: user.profession,
+    city: user.city,
     role: user.role,
     createdAt: user.createdAt,
   };

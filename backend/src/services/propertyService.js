@@ -41,7 +41,7 @@ const buildSort = (query) => {
 };
 
 // Função helper para transformar Property do MongoDB para formato do frontend
-const transformProperty = (property) => {
+export const transformProperty = (property) => {
   if (!property) return null;
   
   const propertyObj = property.toObject ? property.toObject() : property;
@@ -62,9 +62,10 @@ const transformProperty = (property) => {
     ...propertyObj,
     _id: propertyObj._id.toString(),
     featured: propertyObj.isFeatured || false,
-    images: (propertyObj.images || []).map(img => 
-      typeof img === 'string' ? img : (img.url || img)
-    ),
+    images: (propertyObj.images || []).map(img => {
+      if (typeof img === 'string') return img
+      return img.url || ''
+    }).filter(url => url !== ''),
     address: transformedAddress,
   };
 };
@@ -97,16 +98,15 @@ export const getProperties = async (query) => {
     totalPages: Math.ceil(total / limit),
   };
 };
-
 export const getPropertyById = async (propertyId) => {
   const property = await Property.findById(propertyId)
     .populate("createdBy", "name email")
     .lean();
-  
+
   if (!property) {
     throw new Error("Imóvel não encontrado");
   }
-  
+
   return transformProperty(property);
 };
 
