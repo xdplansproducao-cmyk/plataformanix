@@ -1,5 +1,6 @@
 'use client'
 
+import { Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { useProperties } from '@/hooks/useProperties'
 import PropertyCard from '@/components/PropertyCard'
@@ -8,7 +9,7 @@ import Pagination from '@/components/Pagination'
 import { PropertyListSkeleton } from '@/components/LoadingSkeleton'
 import { PropertyFilters } from '@/types'
 
-export default function PropertiesPage() {
+function PropertiesContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
 
@@ -75,5 +76,13 @@ export default function PropertiesPage() {
         </div>
       )}
     </div>
+  )
+}
+
+export default function PropertiesPage() {
+  return (
+    <Suspense fallback={<div className="container mx-auto px-4 py-8"><PropertyListSkeleton /></div>}>
+      <PropertiesContent />
+    </Suspense>
   )
 }
