@@ -26,7 +26,8 @@ export const createProperty = async (req, res, next) => {
     const property = await propertyService.createProperty(
       propertyData,
       req.user._id,
-      images
+      images,
+      req
     );
     return successResponse(res, property, "Imóvel criado com sucesso", 201);
   } catch (error) {
@@ -43,7 +44,8 @@ export const updateProperty = async (req, res, next) => {
       propertyData,
       req.user._id,
       req.user.role,
-      images
+      images,
+      req
     );
     return successResponse(res, property, "Imóvel atualizado com sucesso");
   } catch (error) {

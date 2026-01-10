@@ -41,6 +41,7 @@ export const upload = multer({
   fileFilter,
 });
 
-export const getImageUrl = (filename) => {
-  return `/uploads/${filename}`;
+export const getImageUrl = (filename, req) => {
+  const baseUrl = config.publicBaseUrl || `${req.protocol}://${req.get('host')}`;
+  return `${baseUrl}/uploads/${filename}`;
 };

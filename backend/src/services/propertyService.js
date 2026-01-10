@@ -1,4 +1,5 @@
 import { Property } from "../models/Property.js";
+import { getImageUrl } from "../utils/upload.js";
 
 const buildFilter = (query) => {
   const filter = {};
@@ -110,9 +111,9 @@ export const getPropertyById = async (propertyId) => {
   return transformProperty(property);
 };
 
-export const createProperty = async (propertyData, userId, images = []) => {
+export const createProperty = async (propertyData, userId, images = [], req) => {
   const imageData = images.map((file) => ({
-    url: `/uploads/${file.filename}`,
+    url: getImageUrl(file.filename, req),
     filename: file.filename,
   }));
 
@@ -140,7 +141,7 @@ export const createProperty = async (propertyData, userId, images = []) => {
   return transformProperty(created);
 };
 
-export const updateProperty = async (propertyId, propertyData, userId, userRole, images = []) => {
+export const updateProperty = async (propertyId, propertyData, userId, userRole, images = [], req) => {
   const property = await Property.findById(propertyId);
   if (!property) {
     throw new Error("Imóvel não encontrado");
@@ -166,7 +167,7 @@ export const updateProperty = async (propertyId, propertyData, userId, userRole,
 
   if (images.length > 0) {
     const imageData = images.map((file) => ({
-      url: `/uploads/${file.filename}`,
+      url: getImageUrl(file.filename, req),
       filename: file.filename,
     }));
     dataToUpdate.images = [...(property.images || []), ...imageData];

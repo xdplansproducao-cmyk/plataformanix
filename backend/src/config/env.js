@@ -12,4 +12,5 @@ export const config = {
   rateLimitWindowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || "60000", 10),
   rateLimitMax: parseInt(process.env.RATE_LIMIT_MAX || "120", 10),
   uploadDir: process.env.UPLOAD_DIR || "uploads",
+  publicBaseUrl: process.env.PUBLIC_BASE_URL,
 };
