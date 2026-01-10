@@ -43,7 +43,7 @@ export default function RegisterPage() {
         <div className="card p-8">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div>
-              <label className="block text-sm text-gray-400 mb-2">Nome</label>
+              <label className="block text-sm text-gray-400 mb-2">Nome Completo</label>
               <input
                 type="text"
                 placeholder="Seu nome completo"
@@ -69,6 +69,57 @@ export default function RegisterPage() {
             </div>
 
             <div>
+              <label className="block text-sm text-gray-400 mb-2">Telefone/WhatsApp</label>
+              <input
+                type="tel"
+                placeholder="(11) 99999-9999"
+                {...register('phone')}
+                className="input-field"
+              />
+              {errors.phone && (
+                <p className="text-red-400 text-sm mt-1">{errors.phone.message as string}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm text-gray-400 mb-2">Data de Nascimento</label>
+              <input
+                type="date"
+                {...register('birthDate')}
+                className="input-field"
+              />
+              {errors.birthDate && (
+                <p className="text-red-400 text-sm mt-1">{errors.birthDate.message as string}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm text-gray-400 mb-2">Profissão</label>
+              <input
+                type="text"
+                placeholder="Sua profissão"
+                {...register('profession')}
+                className="input-field"
+              />
+              {errors.profession && (
+                <p className="text-red-400 text-sm mt-1">{errors.profession.message as string}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm text-gray-400 mb-2">Cidade</label>
+              <input
+                type="text"
+                placeholder="Sua cidade"
+                {...register('city')}
+                className="input-field"
+              />
+              {errors.city && (
+                <p className="text-red-400 text-sm mt-1">{errors.city.message as string}</p>
+              )}
+            </div>
+
+            <div>
               <label className="block text-sm text-gray-400 mb-2">Senha</label>
               <input
                 type="password"
@@ -78,6 +129,19 @@ export default function RegisterPage() {
               />
               {errors.password && (
                 <p className="text-red-400 text-sm mt-1">{errors.password.message as string}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm text-gray-400 mb-2">Confirmar Senha</label>
+              <input
+                type="password"
+                placeholder="••••••••"
+                {...register('confirmPassword')}
+                className="input-field"
+              />
+              {errors.confirmPassword && (
+                <p className="text-red-400 text-sm mt-1">{errors.confirmPassword.message as string}</p>
               )}
             </div>
 

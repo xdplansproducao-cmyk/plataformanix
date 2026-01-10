@@ -12,11 +12,11 @@ interface PropertyCardProps {
 
 export default function PropertyCard({ property }: PropertyCardProps) {
   // property.images agora é um array de strings (URLs)
-  const imageUrl = property.images?.[0] 
+  const imageUrl = property.images && property.images.length > 0
     ? property.images[0].startsWith('http') 
       ? property.images[0]
       : `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}${property.images[0]}`
-    : 'https://via.placeholder.com/400x300/2d2d2d/D4AF37?text=Sem+Imagem'
+    : 'https://dummyimage.com/400x300/2d2d2d/D4AF37&text=Sem+Imagem'
 
   return (
     <Link href={`/imoveis/${property._id}`}>

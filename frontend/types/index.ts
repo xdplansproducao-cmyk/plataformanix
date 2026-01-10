@@ -2,6 +2,10 @@ export interface User {
   _id: string
   name: string
   email: string
+  phone: string
+  birthDate: string
+  profession: string
+  city: string
   role: 'user' | 'agent' | 'admin'
   createdAt: string
 }
@@ -28,7 +32,7 @@ export interface Property {
   area: number
   address: Address
   featured: boolean
-  images: string[]
+  images?: string[]
   createdAt: string
   updatedAt: string
 }

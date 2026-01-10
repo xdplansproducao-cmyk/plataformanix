@@ -18,7 +18,7 @@ export default function PropertyDetailPage() {
   const params = useParams()
   const id = params.id as string
   const { data: property, isLoading } = useProperty(id)
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, user } = useAuth()
   const { isFavorite, addFavorite, removeFavorite } = useFavorites()
   const createLead = useCreateLead()
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
@@ -28,6 +28,7 @@ export default function PropertyDetailPage() {
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm<CreateLeadData>({
     resolver: zodResolver(leadSchema),
     defaultValues: {
@@ -41,6 +42,14 @@ export default function PropertyDetailPage() {
         reset()
       },
     })
+  }
+
+  const fillWithUserData = () => {
+    if (user) {
+      setValue('name', user.name)
+      setValue('email', user.email)
+      setValue('phone', user.phone)
+    }
   }
 
   const handleFavorite = () => {
@@ -76,7 +85,7 @@ export default function PropertyDetailPage() {
 
   const imageUrl = property.images?.[currentImageIndex]
     ? `${process.env.NEXT_PUBLIC_API_URL}${property.images[currentImageIndex]}`
-    : 'https://via.placeholder.com/800x600/2d2d2d/D4AF37?text=Sem+Imagem'
+    : 'https://dummyimage.com/800x600/2d2d2d/D4AF37&text=Sem+Imagem'
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -212,6 +221,15 @@ export default function PropertyDetailPage() {
             <p className="text-gray-400 text-sm mb-4">
               Preencha o formulário e entraremos em contato!
             </p>
+            {isAuthenticated && (
+              <button
+                type="button"
+                onClick={fillWithUserData}
+                className="w-full mb-4 py-2 px-4 bg-primary/20 hover:bg-primary/30 text-primary rounded-lg transition-colors"
+              >
+                Usar meus dados cadastrados
+              </button>
+            )}
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div>
                 <input

@@ -30,11 +30,17 @@ apiClient.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
     if (error.response?.status === 401) {
-      // Token inválido ou expirado
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('token')
-        localStorage.removeItem('user')
-        window.location.href = '/login'
+      // Don't redirect for GET requests to properties or auth/me
+      if (error.config?.url?.includes('/api/auth/me') ||
+          (error.config?.method === 'get' && error.config?.url?.includes('/api/properties'))) {
+        // don't redirect
+      } else {
+        // Token inválido ou expirado
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('token')
+          localStorage.removeItem('user')
+          window.location.href = '/login'
+        }
       }
     }
 

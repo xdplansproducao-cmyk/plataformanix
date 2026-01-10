@@ -10,14 +10,14 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#D4AF37',
-          dark: '#B8941F',
-          light: '#E5C866',
+          DEFAULT: '#ebbf0f',
+          dark: '#f8eb40',
+          light: '#ebbf0f',
         },
         dark: {
-          DEFAULT: '#1a1a1a',
-          light: '#2d2d2d',
-          lighter: '#3d3d3d',
+          DEFAULT: '#000000',
+          light: '#0f0f0f',
+          lighter: '#1a1a1a',
         },
       },
     },
