@@ -12,7 +12,11 @@ router.post("/", strictLimiter, validate(createLeadSchema), leadController.creat
 router.use(authenticate);
 router.use(authorize("admin", "agent"));
 
+router.get("/count", leadController.getLeadsCount);
+router.get("/unread-count", leadController.getUnreadLeadsCount);
+
 router.get("/", leadController.getAllLeads);
+router.patch("/:id/read", validate(getLeadSchema), leadController.markLeadAsRead);
 router.get("/:id", validate(getLeadSchema), leadController.getLeadById);
 
 export default router;

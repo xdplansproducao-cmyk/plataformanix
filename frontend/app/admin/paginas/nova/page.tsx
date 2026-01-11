@@ -160,7 +160,7 @@ function AdminNewPageContent() {
                 Slug (URL) *
               </label>
               <div className="flex items-center gap-2">
-                <span className="text-gray-400">/</span>
+                <span className="text-gray-400">/pages/</span>
                 <input
                   type="text"
                   value={formData.slug}
@@ -252,7 +252,7 @@ function AdminNewPageContent() {
               <div className="space-y-2 text-sm">
                 <div>
                   <span className="text-gray-400">URL:</span>
-                  <span className="text-white ml-2">/{formData.slug || 'slug-da-pagina'}</span>
+                  <span className="text-white ml-2">/pages/{formData.slug || 'slug-da-pagina'}</span>
                 </div>
                 <div>
                   <span className="text-gray-400">Status:</span>

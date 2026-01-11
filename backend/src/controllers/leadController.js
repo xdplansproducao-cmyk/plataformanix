@@ -29,3 +29,30 @@ export const getLeadById = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getUnreadLeadsCount = async (req, res, next) => {
+  try {
+    const result = await leadService.getUnreadLeadsCount();
+    return successResponse(res, result, "Contagem de leads não lidos");
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const markLeadAsRead = async (req, res, next) => {
+  try {
+    const lead = await leadService.markLeadAsRead(req.params.id);
+    return successResponse(res, lead, "Lead marcado como lido");
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getLeadsCount = async (req, res, next) => {
+  try {
+    const result = await leadService.getLeadsCount();
+    return successResponse(res, result, "Contagem total de leads");
+  } catch (error) {
+    next(error);
+  }
+};

@@ -32,6 +32,14 @@ const leadSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    isRead: {
+      type: Boolean,
+      default: false,
+    },
+    readAt: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,
@@ -41,6 +49,7 @@ const leadSchema = new mongoose.Schema(
 leadSchema.index({ email: 1 });
 leadSchema.index({ propertyId: 1 });
 leadSchema.index({ createdAt: -1 });
+leadSchema.index({ isRead: 1, createdAt: -1 });
 
 const Lead = mongoose.model("Lead", leadSchema);
 

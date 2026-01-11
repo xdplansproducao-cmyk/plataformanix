@@ -2,6 +2,9 @@ import dotenv from "dotenv";
 import { connectDB } from "../config/db.js";
 import User from "../models/User.js";
 import Property from "../models/Property.js";
+import Page from "../models/Page.js";
+import BlogPost from "../models/BlogPost.js";
+import Lead from "../models/Lead.js";
 import bcrypt from "bcryptjs";
 
 dotenv.config();
@@ -131,6 +134,148 @@ const seed = async () => {
       console.log(`✅ ${properties.length} imóveis criados`);
     } else {
       console.log(`ℹ️  Já existem ${propertiesCount} imóveis no banco`);
+    }
+
+    const pagesSeed = [
+      {
+        title: "Sobre",
+        slug: "sobre",
+        content:
+          "<h1>Sobre a Nix Imóveis</h1><p>Somos especialistas em imóveis e atendimento humanizado.</p><p>Encontre seu próximo lar com a gente.</p>",
+        metaTitle: "Sobre | Nix Imóveis",
+        metaDescription: "Conheça a Nix Imóveis e nossa forma de trabalhar.",
+        published: true,
+      },
+      {
+        title: "Contato",
+        slug: "contato",
+        content:
+          "<h1>Contato</h1><p>Fale com a gente pelo WhatsApp ou envie uma mensagem pelo formulário.</p>",
+        metaTitle: "Contato | Nix Imóveis",
+        metaDescription: "Entre em contato com a Nix Imóveis.",
+        published: true,
+      },
+      {
+        title: "Política de Privacidade",
+        slug: "politica-de-privacidade",
+        content:
+          "<h1>Política de Privacidade</h1><p>Respeitamos sua privacidade e cuidamos dos seus dados.</p>",
+        metaTitle: "Privacidade | Nix Imóveis",
+        metaDescription: "Política de privacidade e uso de dados.",
+        published: true,
+      },
+    ];
+
+    await Promise.all(
+      pagesSeed.map((page) =>
+        Page.findOneAndUpdate({ slug: page.slug }, page, {
+          upsert: true,
+          new: true,
+          setDefaultsOnInsert: true,
+        })
+      )
+    );
+    console.log(`✅ ${pagesSeed.length} páginas garantidas (upsert por slug)`);
+
+    const postsSeed = [
+      {
+        title: "Como escolher o imóvel ideal em 5 passos",
+        slug: "como-escolher-o-imovel-ideal-em-5-passos",
+        excerpt:
+          "Descubra os pontos essenciais para tomar a melhor decisão na hora de comprar ou alugar.",
+        content:
+          "<h1>Como escolher o imóvel ideal</h1><p>Defina orçamento, localização, tamanho e objetivos. Visite com calma e compare opções.</p>",
+        coverImage: null,
+        author: agent._id,
+        category: "dicas",
+        tags: ["imóveis", "dicas", "compra"],
+        published: true,
+        publishedAt: new Date(),
+        featured: true,
+      },
+      {
+        title: "Documentação para compra de imóvel: checklist completo",
+        slug: "documentacao-para-compra-de-imovel-checklist",
+        excerpt:
+          "Um guia rápido com os documentos mais comuns que você vai precisar na compra.",
+        content:
+          "<h1>Checklist de documentação</h1><p>RG/CPF, comprovantes, certidões e análise do imóvel. Consulte sempre seu corretor.</p>",
+        coverImage: null,
+        author: agent._id,
+        category: "financiamento",
+        tags: ["documentos", "financiamento"],
+        published: true,
+        publishedAt: new Date(),
+        featured: false,
+      },
+      {
+        title: "Tendências do mercado imobiliário em 2026",
+        slug: "tendencias-do-mercado-imobiliario-2026",
+        excerpt:
+          "O que está em alta no mercado e como isso impacta quem compra ou vende.",
+        content:
+          "<h1>Tendências 2026</h1><p>Mais digitalização, imóveis compactos em boas localizações e maior demanda por áreas de lazer.</p>",
+        coverImage: null,
+        author: admin._id,
+        category: "mercado",
+        tags: ["mercado", "tendências"],
+        published: true,
+        publishedAt: new Date(),
+        featured: false,
+      },
+    ];
+
+    await Promise.all(
+      postsSeed.map((post) =>
+        BlogPost.findOneAndUpdate({ slug: post.slug }, post, {
+          upsert: true,
+          new: true,
+          setDefaultsOnInsert: true,
+        })
+      )
+    );
+    console.log(`✅ ${postsSeed.length} posts garantidos (upsert por slug)`);
+
+    const existingLeadsCount = await Lead.countDocuments();
+    if (existingLeadsCount === 0) {
+      const firstProperty = await Property.findOne().sort({ createdAt: -1 }).lean();
+      const leadsSeed = [
+        {
+          name: "Mariana Souza",
+          email: "mariana.souza@email.com",
+          phone: "(11) 98888-0001",
+          message: "Olá! Tenho interesse nesse imóvel. Podemos agendar uma visita?",
+          propertyId: firstProperty?._id,
+          source: "site",
+          isRead: false,
+          readAt: null,
+        },
+        {
+          name: "Carlos Pereira",
+          email: "carlos.pereira@email.com",
+          phone: "(11) 98888-0002",
+          message: "Gostaria de mais detalhes sobre valores e condições.",
+          propertyId: firstProperty?._id,
+          source: "site",
+          isRead: true,
+          readAt: new Date(),
+        },
+        {
+          name: "Ana Beatriz",
+          email: "ana.beatriz@email.com",
+          phone: "(11) 98888-0003",
+          message: "Esse imóvel aceita financiamento?",
+          propertyId: firstProperty?._id,
+          source: "whatsapp",
+          isRead: false,
+          readAt: null,
+        },
+      ];
+
+      await Lead.insertMany(leadsSeed);
+      console.log(`✅ ${leadsSeed.length} leads criados`);
+    } else {
+      console.log(`ℹ️  Já existem ${existingLeadsCount} leads no banco`);
     }
 
     console.log("✅ Seed concluído com sucesso!");

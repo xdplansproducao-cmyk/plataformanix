@@ -45,6 +45,8 @@ export interface Lead {
   message: string
   propertyId: string
   property?: Property
+  isRead?: boolean
+  readAt?: string | null
   createdAt: string
 }
 

@@ -18,6 +18,8 @@ const transformLead = (lead) => {
           address: leadObj.propertyId.address,
         }
       : undefined,
+    isRead: !!leadObj.isRead,
+    readAt: leadObj.readAt || null,
   };
 };
 
@@ -55,4 +57,30 @@ export const getLeadById = async (leadId) => {
   }
   
   return transformLead(lead);
+};
+
+export const getUnreadLeadsCount = async () => {
+  const count = await Lead.countDocuments({ $or: [{ isRead: false }, { isRead: { $exists: false } }] });
+  return { count };
+};
+
+export const getLeadsCount = async () => {
+  const count = await Lead.countDocuments();
+  return { count };
+};
+
+export const markLeadAsRead = async (leadId) => {
+  const updated = await Lead.findByIdAndUpdate(
+    leadId,
+    { $set: { isRead: true, readAt: new Date() } },
+    { new: true }
+  )
+    .populate("propertyId", "title address price")
+    .lean();
+
+  if (!updated) {
+    throw new Error("Lead não encontrado");
+  }
+
+  return transformLead(updated);
 };

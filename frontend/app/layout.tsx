@@ -4,6 +4,7 @@ import './globals.css'
 import { Providers } from './providers'
 import { Toaster } from 'react-hot-toast'
 import ConditionalNavbar from '@/components/ConditionalNavbar'
+import ConditionalFooter from '@/components/ConditionalFooter'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -25,6 +26,7 @@ export default function RootLayout({
           <main className="min-h-screen">
             {children}
           </main>
+          <ConditionalFooter />
           <Toaster position="top-right" />
         </Providers>
       </body>

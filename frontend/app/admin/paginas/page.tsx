@@ -135,7 +135,7 @@ function AdminPagesContent() {
                   </div>
                   <p className="text-gray-400 mb-3 line-clamp-2">{page.content}</p>
                   <div className="flex items-center gap-4 text-sm text-gray-500">
-                    <span>Slug: /{page.slug}</span>
+                    <span>Slug: /pages/{page.slug}</span>
                     <span>
                       Criada {formatDistanceToNow(new Date(page.createdAt), {
                         addSuffix: true,
@@ -154,7 +154,7 @@ function AdminPagesContent() {
                 </div>
                 <div className="flex items-center gap-2 ml-4">
                   <Link
-                    href={`/${page.slug}`}
+                    href={`/pages/${page.slug}`}
                     target="_blank"
                     className="p-2 text-gray-400 hover:text-primary transition-colors"
                     title="Visualizar página"

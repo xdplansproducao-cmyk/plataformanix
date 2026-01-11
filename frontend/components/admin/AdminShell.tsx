@@ -3,6 +3,9 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import ProtectedRoute from '@/components/ProtectedRoute'
+import { useUnreadLeadsCount } from '@/hooks/useLeads'
+import { useEffect, useRef } from 'react'
+import toast from 'react-hot-toast'
 import {
   LayoutDashboard,
   Building2,
@@ -63,9 +66,10 @@ function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`)
 }
 
-function NavLink({ href, label, icon: Icon }: NavItem) {
+function NavLink({ href, label, icon: Icon, unreadCount }: NavItem & { unreadCount?: number }) {
   const pathname = usePathname()
   const active = isActive(pathname, href)
+  const showLeadsBadge = href === '/admin/leads' && !!unreadCount && unreadCount > 0
 
   return (
     <Link
@@ -78,11 +82,30 @@ function NavLink({ href, label, icon: Icon }: NavItem) {
     >
       <Icon className="w-4 h-4" />
       <span className="text-sm font-medium">{label}</span>
+      {showLeadsBadge && (
+        <span className="ml-auto text-xs font-semibold bg-red-600 text-white px-2 py-0.5 rounded-full">
+          {unreadCount}
+        </span>
+      )}
     </Link>
   )
 }
 
 export default function AdminShell({ children }: { children: React.ReactNode }) {
+  const { data: unreadCount } = useUnreadLeadsCount()
+
+  const prevUnreadCountRef = useRef<number | null>(null)
+
+  useEffect(() => {
+    if (typeof unreadCount !== 'number') return
+
+    if (prevUnreadCountRef.current !== null && unreadCount > prevUnreadCountRef.current) {
+      toast.success(`Novo lead recebido (${unreadCount} não lidos)`)
+    }
+
+    prevUnreadCountRef.current = unreadCount
+  }, [unreadCount])
+
   return (
     <ProtectedRoute requireAdmin>
       <div className="min-h-screen">
@@ -103,7 +126,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
                   </div>
                   <div className="space-y-1">
                     {group.items.map((item) => (
-                      <NavLink key={item.href} {...item} />
+                      <NavLink key={item.href} {...item} unreadCount={unreadCount} />
                     ))}
                   </div>
                 </div>
@@ -132,6 +155,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
                     className="text-xs px-3 py-2 rounded-lg border border-dark-lighter text-gray-300 hover:text-white hover:bg-dark-light"
                   >
                     {item.label}
+                    {item.href === '/admin/leads' && !!unreadCount && unreadCount > 0 ? ` (${unreadCount})` : ''}
                   </Link>
                 ))}
               </div>

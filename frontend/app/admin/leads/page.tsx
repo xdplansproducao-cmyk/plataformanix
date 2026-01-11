@@ -1,6 +1,6 @@
 'use client'
 
-import { useLeads } from '@/hooks/useLeads'
+import { useLeads, useMarkLeadAsRead } from '@/hooks/useLeads'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import { formatPrice } from '@/lib/utils'
 import { MessageSquare, Mail, Phone, Calendar, Building2 } from 'lucide-react'
@@ -16,6 +16,7 @@ export default function AdminLeadsPage() {
 
 function AdminLeadsContent() {
   const { data: leads, isLoading } = useLeads()
+  const markAsReadMutation = useMarkLeadAsRead()
 
   if (isLoading) {
     return (
@@ -42,10 +43,32 @@ function AdminLeadsContent() {
       {leads && leads.length > 0 ? (
         <div className="space-y-4">
           {leads.map((lead) => (
-            <div key={lead._id} className="card p-6">
+            <div
+              key={lead._id}
+              className={`card p-6 ${lead.isRead ? '' : 'border border-red-600/40'}`}
+              onClick={() => {
+                if (!lead.isRead && !markAsReadMutation.isPending) {
+                  markAsReadMutation.mutate(lead._id)
+                }
+              }}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !lead.isRead && !markAsReadMutation.isPending) {
+                  markAsReadMutation.mutate(lead._id)
+                }
+              }}
+            >
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h3 className="text-xl font-semibold mb-2">{lead.name}</h3>
+                  <div className="flex items-center gap-2 mb-2">
+                    <h3 className="text-xl font-semibold">{lead.name}</h3>
+                    {!lead.isRead && (
+                      <span className="text-xs font-semibold bg-red-600 text-white px-2 py-1 rounded-full">
+                        Não lido
+                      </span>
+                    )}
+                  </div>
                   <div className="flex flex-wrap items-center gap-4 text-sm text-gray-400">
                     <div className="flex items-center">
                       <Mail className="w-4 h-4 mr-2" />
@@ -65,12 +88,28 @@ function AdminLeadsContent() {
                   <Link
                     href={`/imoveis/${lead.propertyId}`}
                     className="flex items-center space-x-2 text-primary hover:text-primary-dark transition-colors"
+                    onClick={(e) => e.stopPropagation()}
                   >
                     <Building2 className="w-5 h-5" />
                     <span className="text-sm">Ver Imóvel</span>
                   </Link>
                 )}
               </div>
+
+              {!lead.isRead && (
+                <div className="mb-4">
+                  <button
+                    className="text-sm px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white transition-colors"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      markAsReadMutation.mutate(lead._id)
+                    }}
+                    disabled={markAsReadMutation.isPending}
+                  >
+                    Marcar como lido
+                  </button>
+                </div>
+              )}
 
               {lead.property && (
                 <div className="mb-4 p-4 bg-dark-lighter rounded-lg">
