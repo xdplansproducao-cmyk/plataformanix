@@ -1,4 +1,4 @@
-import { Property } from "../models/Property.js";
+import Property from "../models/Property.js";
 import { getImageUrl } from "../utils/upload.js";
 
 const buildFilter = (query) => {

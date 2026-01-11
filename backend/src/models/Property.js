@@ -128,4 +128,6 @@ propertySchema.index({ price: 1 });
 propertySchema.index({ isFeatured: 1 });
 propertySchema.index({ createdAt: -1 });
 
-export const Property = mongoose.model("Property", propertySchema);
+const Property = mongoose.model("Property", propertySchema);
+
+export default Property;

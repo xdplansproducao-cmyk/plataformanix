@@ -42,4 +42,6 @@ leadSchema.index({ email: 1 });
 leadSchema.index({ propertyId: 1 });
 leadSchema.index({ createdAt: -1 });
 
-export const Lead = mongoose.model("Lead", leadSchema);
+const Lead = mongoose.model("Lead", leadSchema);
+
+export default Lead;

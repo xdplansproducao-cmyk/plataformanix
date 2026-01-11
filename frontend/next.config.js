@@ -8,6 +8,10 @@ const nextConfig = {
         port: '4000',
         pathname: '/uploads/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'dummyimage.com',
+      },
       ...(process.env.NEXT_PUBLIC_BACKEND_HOST
         ? [{
             protocol: 'https',

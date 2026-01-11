@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { favoritesService } from '@/services/favoritesService'
 import { Favorite } from '@/types'
 import toast from 'react-hot-toast'
+import { tokenStorage } from '@/lib/auth/token'
 
 export function useFavorites() {
   const queryClient = useQueryClient()
@@ -12,6 +13,7 @@ export function useFavorites() {
     queryKey: ['favorites'],
     queryFn: favoritesService.getAll,
     retry: false,
+    enabled: typeof window !== 'undefined' && !!tokenStorage.get(),
   })
 
   const addMutation = useMutation({

@@ -49,3 +49,13 @@ export const leadSchema = z.object({
   message: z.string().min(10, 'Mensagem deve ter no mínimo 10 caracteres'),
   propertyId: z.string().min(1, 'ID do imóvel é obrigatório'),
 })
+
+export const blogPostSchema = z.object({
+  title: z.string().min(5, 'O título deve ter no mínimo 5 caracteres').max(200, 'O título deve ter no máximo 200 caracteres'),
+  excerpt: z.string().min(10, 'O resumo deve ter no mínimo 10 caracteres').max(500, 'O resumo deve ter no máximo 500 caracteres'),
+  content: z.string().min(50, 'O conteúdo deve ter no mínimo 50 caracteres'),
+  category: z.enum(['dicas', 'mercado', 'financiamento', 'decoracao', 'noticias', 'outros']),
+  tags: z.string().optional(),
+  published: z.boolean().optional(),
+  featured: z.boolean().optional(),
+})

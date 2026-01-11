@@ -108,3 +108,138 @@ export interface CreateLeadData {
   message: string
   propertyId: string
 }
+
+export interface BlogPost {
+  _id: string
+  title: string
+  slug: string
+  excerpt: string
+  content: string
+  coverImage: string | null
+  author: {
+    _id: string
+    name: string
+    email: string
+  }
+  category: 'dicas' | 'mercado' | 'financiamento' | 'decoracao' | 'noticias' | 'outros'
+  tags: string[]
+  published: boolean
+  publishedAt: string | null
+  views: number
+  featured: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+export interface BlogPostFilters {
+  page?: number
+  limit?: number
+  category?: string
+  tag?: string
+  featured?: boolean
+  published?: boolean
+  search?: string
+}
+
+export interface CreateBlogPostData {
+  title: string
+  excerpt: string
+  content: string
+  category?: 'dicas' | 'mercado' | 'financiamento' | 'decoracao' | 'noticias' | 'outros'
+  tags?: string[]
+  published?: boolean
+  featured?: boolean
+}
+
+export interface UpdateBlogPostData {
+  title?: string
+  excerpt?: string
+  content?: string
+  category?: 'dicas' | 'mercado' | 'financiamento' | 'decoracao' | 'noticias' | 'outros'
+  tags?: string[]
+  published?: boolean
+  featured?: boolean
+}
+
+export interface BlogPaginatedResponse {
+  posts: BlogPost[]
+  pagination: {
+    page: number
+    limit: number
+    total: number
+    pages: number
+  }
+}
+
+export interface Page {
+  _id: string
+  title: string
+  slug: string
+  content: string
+  metaTitle?: string
+  metaDescription?: string
+  published: boolean
+  publishedAt: string | null
+  createdAt: string
+  updatedAt: string
+}
+
+export interface MenuItem {
+  _id: string
+  label: string
+  href: string
+  order: number
+  published: boolean
+  parentId?: string
+  children?: MenuItem[]
+  menuType: 'main' | 'footer' | 'sidebar'
+  contentType: 'custom' | 'page' | 'post' | 'link'
+  pageId?: string
+  postId?: string
+  target: '_self' | '_blank'
+  createdAt: string
+  updatedAt: string
+}
+
+export interface CreatePageData {
+  title: string
+  slug: string
+  content: string
+  metaTitle?: string
+  metaDescription?: string
+  published?: boolean
+}
+
+export interface UpdatePageData {
+  title?: string
+  slug?: string
+  content?: string
+  metaTitle?: string
+  metaDescription?: string
+  published?: boolean
+}
+
+export interface CreateMenuItemData {
+  label: string
+  href: string
+  order: number
+  published?: boolean
+  parentId?: string
+  menuType?: 'main' | 'footer' | 'sidebar'
+  contentType?: 'custom' | 'page' | 'post' | 'link'
+  pageId?: string
+  postId?: string
+  target?: '_self' | '_blank'
+}
+
+export interface UpdateMenuItemData {
+  id: string
+  [key: string]: any
+}
+
+export interface PageFilters {
+  page?: number
+  limit?: number
+  published?: boolean
+  search?: string
+}

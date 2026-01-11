@@ -30,9 +30,12 @@ apiClient.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
     if (error.response?.status === 401) {
-      // Don't redirect for GET requests to properties or auth/me
-      if (error.config?.url?.includes('/api/auth/me') ||
-          (error.config?.method === 'get' && error.config?.url?.includes('/api/properties'))) {
+      // Don't redirect for GET requests to public endpoints or auth/me
+      const isPublicGetRequest = error.config?.method === 'get' && 
+        (error.config?.url?.includes('/api/properties') || 
+         error.config?.url?.includes('/api/favorites'))
+      
+      if (error.config?.url?.includes('/api/auth/me') || isPublicGetRequest) {
         // don't redirect
       } else {
         // Token inválido ou expirado

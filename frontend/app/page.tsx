@@ -3,9 +3,23 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useProperties } from '@/hooks/useProperties'
+import { useFeaturedPosts } from '@/hooks/useBlog'
 import PropertyCard from '@/components/PropertyCard'
 import { PropertyListSkeleton } from '@/components/LoadingSkeleton'
-import { Search } from 'lucide-react'
+import { Search, Calendar, ArrowRight } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { formatDistanceToNow } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
+
+const CATEGORY_LABELS: Record<string, string> = {
+  dicas: 'Dicas',
+  mercado: 'Mercado Imobiliário',
+  financiamento: 'Financiamento',
+  decoracao: 'Decoração',
+  noticias: 'Notícias',
+  outros: 'Outros',
+}
 
 export default function HomePage() {
   const router = useRouter()
@@ -28,6 +42,9 @@ export default function HomePage() {
     status: 'sale',
     limit: 6,
   })
+
+  // Buscar posts em destaque
+  const { data: featuredPosts, isLoading: blogLoading } = useFeaturedPosts(3)
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -142,6 +159,83 @@ export default function HomePage() {
         ) : (
           <p className="text-gray-400 text-center py-8">Nenhum imóvel para venda no momento.</p>
         )}
+      </section>
+
+      {/* Blog em Destaque */}
+      <section className="py-16 bg-dark-light">
+        <div className="container mx-auto px-4">
+          <div className="flex justify-between items-center mb-8">
+            <div>
+              <h2 className="text-3xl font-bold">Blog</h2>
+              <p className="text-gray-400 mt-2">Últimas notícias e dicas sobre o mercado imobiliário</p>
+            </div>
+            <Link
+              href="/blog"
+              className="text-primary hover:text-primary/80 transition-colors flex items-center gap-2"
+            >
+              Ver todos
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
+
+          {blogLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="card p-4 animate-pulse">
+                  <div className="h-48 bg-dark-lighter rounded mb-4"></div>
+                  <div className="h-6 bg-dark-lighter rounded mb-2"></div>
+                  <div className="h-4 bg-dark-lighter rounded w-2/3"></div>
+                </div>
+              ))}
+            </div>
+          ) : featuredPosts && featuredPosts.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {featuredPosts.map((post) => {
+                const imageUrl = post.coverImage
+                  ? `${process.env.NEXT_PUBLIC_API_URL}${post.coverImage}`
+                  : 'https://dummyimage.com/600x400/2d2d2d/D4AF37&text=Blog+Post'
+
+                return (
+                  <Link
+                    key={post._id}
+                    href={`/blog/${post.slug}`}
+                    className="card overflow-hidden hover:ring-2 hover:ring-primary transition-all group"
+                  >
+                    <div className="relative h-48 w-full">
+                      <Image
+                        src={imageUrl}
+                        alt={post.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                      />
+                    </div>
+                    <div className="p-6">
+                      <span className="text-xs px-2 py-1 bg-primary/20 text-primary rounded">
+                        {CATEGORY_LABELS[post.category] || post.category}
+                      </span>
+                      <h3 className="text-xl font-bold mt-3 mb-2 group-hover:text-primary transition-colors line-clamp-2">
+                        {post.title}
+                      </h3>
+                      <p className="text-gray-400 text-sm mb-4 line-clamp-2">{post.excerpt}</p>
+                      <div className="flex items-center text-xs text-gray-500">
+                        <Calendar className="w-4 h-4 mr-1" />
+                        {post.publishedAt
+                          ? formatDistanceToNow(new Date(post.publishedAt), {
+                              addSuffix: true,
+                              locale: ptBR,
+                            })
+                          : 'Rascunho'}
+                      </div>
+                    </div>
+                  </Link>
+                )
+              })}
+            </div>
+          ) : (
+            <p className="text-gray-400 text-center py-8">Nenhum post no blog ainda.</p>
+          )}
+        </div>
       </section>
     </div>
   )

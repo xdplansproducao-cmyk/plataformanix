@@ -1,4 +1,4 @@
-import { Lead } from "../models/Lead.js";
+import Lead from "../models/Lead.js";
 
 // Função helper para transformar Lead do MongoDB para formato do frontend
 const transformLead = (lead) => {

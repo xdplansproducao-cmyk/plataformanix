@@ -1,4 +1,4 @@
-import { User } from "../models/User.js";
+import User from "../models/User.js";
 
 export const getAllUsers = async (page = 1, limit = 10) => {
   const skip = (page - 1) * limit;

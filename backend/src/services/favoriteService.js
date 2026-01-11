@@ -1,5 +1,5 @@
-import { Favorite } from "../models/Favorite.js";
-import { Property } from "../models/Property.js";
+import Favorite from "../models/Favorite.js";
+import Property from "../models/Property.js";
 import { transformProperty } from "./propertyService.js";
 
 export const addFavorite = async (userId, propertyId) => {
